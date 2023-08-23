@@ -1,8 +1,8 @@
 class ReactionsController < ApplicationController
-    before_action :athenticate_user!
+    before_action :authenticate_user!
     def new_user_reaction
     @user = current_user
-    @post = post.find(params[:post_id]) if params[:post_id]
+    @post = Post.find(params[:post_id]) if params[:post_id]
     @kind = params[:kind]
     respond_to do |format|
         

@@ -1,0 +1,13 @@
+<div>
+    <% @comments.each do |comment| %>
+        <p>
+            <% if comment.user %>
+            <%= comment.user.name %>: <br>
+            <%= comment.content %>
+            <% else %>
+             <strong>User unknown:</strong>
+             <%= comment.content %>
+             <% end %>
+        </p>
+    <% end %>
+</div>

@@ -1,11 +1,11 @@
 class CommentsController < ApplicationController
     before_action :set_comment, only: %i[ show edit update destroy ]
     #before_action :set_post
-    before_action :authenticate_user!, except: %i[ index show]
+    before_action :authenticate_user!, except: %i[ index show create new]
     #before_action :comment_permission, only: %i[ edit destroy ]
-    before_action only: %i[ destroy ] do
-      authorize_request(["admin"])
-    end
+    # before_action only: %i[ destroy ] do
+    #   authorize_request(["admin"])
+    # end
     
 
   
@@ -20,14 +20,16 @@ class CommentsController < ApplicationController
     def create
         @post = Post.find(params[:comment][:post_id])
         @comment = Comment.new(comment_params)
-        @comment.user = current_user
+        @comment.user = current_user if current_user.present?
+
   
       respond_to do |format|
         if @comment.save
           format.html { redirect_to post_path(@post.id), notice: "Comment was successfully created." }
           format.json { render :show, status: :created, location: @comment }
         else
-          format.html { render :new, status: :unprocessable_entity }
+          Rails.logger.debug "Comment errors: #{@comment.errors.full_messages}"
+          format.html { redirect_to post_path(@post.id), notice: "Comment wasn't created." }
           format.json { render json: @comment.errors, status: :unprocessable_entity }
         end
       end

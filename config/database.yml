@@ -88,3 +88,4 @@ production:
   database: crazy4cats_production
   username: crazy4cats
   password: <%= ENV["CRAZY4CATS_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
